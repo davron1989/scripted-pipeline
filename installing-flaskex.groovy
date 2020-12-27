@@ -5,6 +5,9 @@ properties([
 ])
 node {
     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-master', keyFileVariable: 'SSHKEY', passphraseVariable: '', usernameVariable: 'SSHUSERNAME')]){ 
+        stage("Initialize"){
+            sh "ssh -o StrictHostKeyChecking=no -i $SSHKEY $SSHUSERNAME@${params.SSHNODE} yum install epel-release -y "
+        }
         stage("Installin Python3"){
             sh "ssh -o StrictHostKeyChecking=no -i $SSHKEY $SSHUSERNAME@${params.SSHNODE} yum install -y python3 -y "
         }
