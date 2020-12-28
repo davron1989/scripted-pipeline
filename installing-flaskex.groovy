@@ -21,10 +21,10 @@ node {
             sh "ssh -o StrictHostKeyChecking=no -i $SSHKEY $SSHUSERNAME@${params.SSHNODE} git clone https://github.com/anfederico/Flaskex "
         }
         stage("changing directory"){
-            sh "ssh -o StrictHostKeyChecking=no -i $SSHKEY $SSHUSERNAME@${params.SSHNODE} cd Flaskex/ "
+            sh "ssh -o StrictHostKeyChecking=no -i $SSHKEY $SSHUSERNAME@${params.SSHNODE} cd Flaskex/"
         }
         stage("Installing requirements"){
-            sh "ssh -o StrictHostKeyChecking=no -i $SSHKEY $SSHUSERNAME@${params.SSHNODE} pip install -r requirements.txt "
+            sh "ssh -o StrictHostKeyChecking=no -i $SSHKEY $SSHUSERNAME@${params.SSHNODE} pip install -r requirements.txt"
         }
         stage("Installing application"){
             sh "ssh -o StrictHostKeyChecking=no -i $SSHKEY $SSHUSERNAME@${params.SSHNODE} python app.py "
