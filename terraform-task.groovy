@@ -10,33 +10,36 @@ node{
         git branch: 'solution', url: 'https://github.com/ikambarov/terraform-task.git'
     }
     dir('sandbox/'){
-        withCredentials([usernamePassword(credentialsId: 'aws_jenkins_key', passwordVariable: 'SECRET_ACCESS_KEY', usernameVariable: 'ACCESS_KEY_ID')]) {
-            stage("Terraform Init"){
-                sh """
-                    terraform init
-                """
-            }
-            if(params.terraform_apply){
-                stage("Terraform Apply"){
+        withEnv(['AWS_REGION=us-east-1']){
+            withCredentials([usernamePassword(credentialsId: 'aws_jenkins_key', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+                stage("Terraform Init"){
                     sh """
-                        terraform apply -auto-approve
+                        terraform init
                     """
                 }
-            }
-            else if(params.terraform_destroy){
-                stage("Terraform Destroy"){
-                    sh """
-                        terraform destroy -auto-approve
-                    """
+                if(params.terraform_apply){
+                    stage("Terraform Apply"){
+                        sh """
+                            terraform apply -auto-approve
+                        """
+                    }
                 }
-            }
-            else {
-                stage("Terraform Plan"){
-                    sh """
-                        terraform plan
-                    """
+                else if(params.terraform_destroy){
+                    stage("Terraform Destroy"){
+                        sh """
+                            terraform destroy -auto-approve
+                        """
+                    }
                 }
-            }           
+                else {
+                    stage("Terraform Plan"){
+                        sh """
+                            terraform plan
+                        """
+                    }
+                }           
+            }
         }
+        
     }
 }
