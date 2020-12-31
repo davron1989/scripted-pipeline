@@ -16,7 +16,7 @@ else if (params.environment == 'qa'){
     aws_region_var = 'us-east-2'
 }
 else if (params.environment == 'prod'){
-    aws_region_var = 'us-east-3'
+    aws_region_var = 'us-west-2'
 }
     
 node{
@@ -24,7 +24,7 @@ node{
         cleanWs() 
         git branch: 'master', url: 'https://github.com/davron1989/terraform-vpc.git'
     }
-    withEnv(['AWS_REGION=us-east-1']){
+    withEnv(["AWS_REGION=${aws_region_var}"]){
         withCredentials([usernamePassword(credentialsId: 'aws_jenkins_key', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
             stage("Terraform Init"){
                 sh """
