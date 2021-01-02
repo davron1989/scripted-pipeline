@@ -6,7 +6,9 @@ properties([
         string(defaultValue: '', description: 'Provide AMI Name', name: 'ami_name', trim: true)
     ])
 ])
+
 def aws_region_var = ''
+
 if(params.environment == "dev") {
     println("Applying Dev")
     aws_region_var = "us-east-1"
@@ -43,7 +45,7 @@ def tfvar = """
 node{
     stage("Pull Repo"){
         cleanWs()
-        git url: 'https://github.com/ikambarov/terraform-ec2-by-ami-name.git'
+        git url: 'https://github.com/davron1989/terraform-ec2-by-ami-name.git'
         writeFile file: "${params.environment}.tfvars", text: "${tfvar}"
     }
     withCredentials([usernamePassword(credentialsId: 'aws_jenkins_key', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
